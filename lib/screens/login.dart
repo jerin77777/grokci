@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'widgets.dart';
-import 'backend/server.dart';
-import 'types.dart';
+import '../widgets/widgets.dart';
+import '../backend/server.dart';
+import '../types.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});

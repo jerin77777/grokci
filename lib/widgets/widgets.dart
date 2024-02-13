@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'types.dart';
+import '../types.dart';
 
 class ProfileIcon extends StatelessWidget {
   const ProfileIcon(

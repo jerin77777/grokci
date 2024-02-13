@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'widgets.dart';
-import 'types.dart';
-import 'chart.dart';
+import '../widgets/widgets.dart';
+import '../types.dart';
+import '../widgets/chart.dart';
 import 'package:flutter_svg/svg.dart';
 
 class Dashboard extends StatefulWidget {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'dashboard.dart';
+import 'screens/dashboard.dart';
 // import 'package:grokci_fe/orders.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'login.dart';
-import 'orders.dart';
-import 'account.dart';
+import 'screens/login.dart';
+import 'screens/orders.dart';
+import 'screens/account.dart';
 import 'types.dart';
 import 'package:appwrite/appwrite.dart';
 import 'backend/server.dart';

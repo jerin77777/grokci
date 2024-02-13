@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'types.dart';
-import 'widgets.dart';
+import '../types.dart';
+import '../widgets/widgets.dart';
 import 'package:appwrite/appwrite.dart';
 
 class Orders extends StatefulWidget {

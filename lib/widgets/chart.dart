@@ -2,7 +2,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-import 'types.dart';
+import '../types.dart';
 
 class LineChart2 extends StatelessWidget {
   const LineChart2({required this.isShowingMainData});
