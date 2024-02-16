@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(TextTheme(
@@ -49,14 +50,14 @@ class MyApp extends StatelessWidget {
         iconTheme: IconThemeData(color: Pallet.font1),
         primarySwatch: Colors.blue,
       ),
-      home: const Home(),
+      home: Login(),
     );
   }
 }
 
 class Home extends StatefulWidget {
-  const Home({super.key});
-
+  const Home({super.key, required this.adminApproved});
+  final bool adminApproved;
   @override
   State<Home> createState() => _HomeState();
 }
@@ -66,8 +67,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    test();
-    
+    // test();
     super.initState();
   }
 
@@ -78,6 +78,14 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    mainContext = context;
+    if (!widget.adminApproved) {
+      return Scaffold(
+        body: Center(
+          child: Text("Waiting for Admin Aproval"),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: Pallet.background,
       bottomNavigationBar: BottomNavigationBar(

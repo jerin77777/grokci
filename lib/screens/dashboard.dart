@@ -76,7 +76,7 @@ class _DashboardState extends State<Dashboard> {
           if (data!["pendingOrder"] != null)
             GestureDetector(
               onTap: () {
-                Navigator.of(context)
+                Navigator.of(mainContext)
                     .push(MaterialPageRoute(builder: (context) => OrderDetails(order: data!["pendingOrder"])));
               },
               child: Container(

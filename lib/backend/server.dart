@@ -12,6 +12,8 @@ import 'package:localstorage/localstorage.dart';
 late Databases db;
 late Account account;
 late Storage storage;
+late BuildContext mainContext;
+
 final LocalStorage local = LocalStorage('grokci');
 
 // late TwilioFlutter twilioFlutter;
@@ -64,6 +66,14 @@ getProducts(orderId) async {
   }
 
   return products;
+}
+
+getMyOrders() async {
+  await local.ready;
+  String phone = local.getItem("phone");
+  DocumentList temp = await db.listDocuments(
+      databaseId: AppConfig.database, collectionId: AppConfig.orders, queries: [Query.equal("driverId", phone)]);
+  return getResult(temp.documents);
 }
 
 Future<Map> getDashboard() async {
@@ -137,7 +147,7 @@ Future<Map> getUserData() async {
   String phone = local.getItem("phone");
   Document temp =
       await db.getDocument(databaseId: AppConfig.database, collectionId: AppConfig.drivers, documentId: phone);
-      print(temp.data);
+  print(temp.data);
   return temp.data;
 }
 
@@ -157,15 +167,21 @@ Future<Map> getWareHouse() async {
 
 login(context, phoneNumber) async {
   try {
-    await db.getDocument(databaseId: AppConfig.database, collectionId: AppConfig.drivers, documentId: phoneNumber);
+    Document temp =
+        await db.getDocument(databaseId: AppConfig.database, collectionId: AppConfig.drivers, documentId: phoneNumber);
     await local.ready;
     local.setItem("phone", phoneNumber);
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Home()));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => Home(
+              adminApproved: temp.data["adminApproved"],
+            )));
   } catch (e) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => SignUp(
               phoneNumber: phoneNumber,
             )));
+
+    // Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
   }
   // TwilioFlutter twilioFlutter = TwilioFlutter(
   //     accountSid: AppConfig.twilloSid, // replace *** with Account SID
@@ -225,6 +241,7 @@ updateOrderStatus(String orderId, String status) async {
 }
 
 createAccount(
+  context,
   String phoneNumber,
   String userName,
   String age,
@@ -256,4 +273,7 @@ createAccount(
     "fileFront": _fileFront,
     "fileBack": _fileBack
   });
+
+  local.setItem("phone", phoneNumber);
+  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home(adminApproved: false)));
 }

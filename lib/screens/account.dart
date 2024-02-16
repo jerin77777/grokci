@@ -62,7 +62,8 @@ class _ProfileState extends State<Profile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Hi, ${data!["userName"]}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18, overflow: TextOverflow.clip)),
+                      Text("Hi, ${data!["userName"]}",
+                          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18, overflow: TextOverflow.clip)),
                       SizedBox(height: 8),
                       Text(
                         "hey how are u doing?",
@@ -130,5 +131,38 @@ class _ProfileState extends State<Profile> {
         ],
       ),
     );
+  }
+}
+
+class MyOrders extends StatefulWidget {
+  const MyOrders({super.key});
+
+  @override
+  State<MyOrders> createState() => _MyOrdersState();
+}
+
+class _MyOrdersState extends State<MyOrders> {
+  List<Map> orders = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  getData() async {
+    orders = await getMyOrders();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: ListView(
+      children: [
+        for (var order in orders)
+          Container(
+            child: Text(""),
+          )
+      ],
+    ));
   }
 }

@@ -19,5 +19,5 @@ class Pallet {
 
   static Color inner1 =  Color(0xFFeaefe9);
   static Color shadow =  Color(0xFFeaefe9);
-
 }
+

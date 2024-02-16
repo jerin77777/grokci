@@ -1,5 +1,5 @@
-import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart';
+// import 'package:appwrite/appwrite.dart';
+// import 'package:appwrite/models.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -94,15 +94,15 @@ class _LoginState extends State<Login> {
                 ),
               ),
               SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "Use Email instead",
-                    style: TextStyle(color: Pallet.primary2),
-                  )
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     Text(
+              //       "Use Email instead",
+              //       style: TextStyle(color: Pallet.primary2),
+              //     )
+              //   ],
+              // ),
               Expanded(child: SizedBox()),
               RichText(
                 text: TextSpan(
@@ -350,7 +350,7 @@ class _SignUpState extends State<SignUp> {
                     setState(() {});
 
                     if (!error) {
-                      createAccount(widget.phoneNumber, userName.text, age.text, fileFront!, fileBack);
+                      createAccount(context,widget.phoneNumber, userName.text, age.text, fileFront!, fileBack);
                     }
                   }),
               SizedBox(height: 10),

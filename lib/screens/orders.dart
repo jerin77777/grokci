@@ -39,8 +39,7 @@ class _OrdersState extends State<Orders> {
           for (var order in orders)
             GestureDetector(
               onTap: () {
-                print(order);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => OrderDetails(order: order)));
+                Navigator.of(mainContext).push(MaterialPageRoute(builder: (context) => OrderDetails(order: order)));
               },
               child: Container(
                 height: 130,
@@ -126,266 +125,268 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: [
-                Text(
-                  "Order Details",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
-                ),
-                SizedBox(height: 10),
-                Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Pallet.inner1),
-                    child: Row(
-                      children: [
-                        Expanded(
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: [
+                  Text(
+                    "Order Details",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Pallet.inner1),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Order Id"),
+                                Text(widget.order["\$id"]),
+                              ],
+                            ),
+                          ),
+                          Icon(Icons.copy)
+                        ],
+                      )),
+                  SizedBox(height: 10),
+                  Text(
+                    "user data:",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 5),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(widget.order["username"]),
+                            SizedBox(height: 5),
+                            // Text("jerinjacob0007@gmail.com"),
+                            Text("+91 ${widget.order["phoneNumber"]}"),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        decoration:
+                            BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white, boxShadow: [
+                          BoxShadow(color: Pallet.shadow, offset: const Offset(2, 2), blurRadius: 1, spreadRadius: 2),
+                        ]),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.call,
+                              color: Pallet.primary,
+                              size: 20,
+                            ),
+                            SizedBox(width: 5),
+                            Text(
+                              "call",
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Items:",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 5),
+                  for (var product in products)
+                    Container(
+                      height: 100,
+                      padding: EdgeInsets.all(8),
+                      margin: EdgeInsets.only(bottom: 5),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Pallet.inner1),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              getUrl(product["imageId"]),
+                              // "assets/oil.jpeg",
+                              width: 90,
+                              height: 90,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Expanded(
+                              child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(product["name"]),
+                                  Container(
+                                      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Pallet.primary,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "qty: ${product["qty"]}",
+                                          style: TextStyle(fontSize: 12, color: Colors.white),
+                                        ),
+                                      ))
+                                ],
+                              ),
+                              Expanded(child: SizedBox()),
+                              Container(
+                                  padding: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.05), borderRadius: BorderRadius.circular(5)),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                          child: Text(
+                                        product["\$id"],
+                                        style: TextStyle(fontSize: 12),
+                                      )),
+                                      Icon(Icons.copy)
+                                    ],
+                                  )),
+                            ],
+                          )),
+                        ],
+                      ),
+                    ),
+                  SizedBox(height: 5),
+                  Text(
+                    "Details:",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 5),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 60,
+                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Pallet.primary),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Order Id"),
-                              Text(widget.order["\$id"]),
+                              Text("Total Amount", style: TextStyle(fontSize: 12, color: Colors.white)),
+                              // style: TextStyle(fontSize: 12, color: Pallet.font2)),
+                              Expanded(child: SizedBox()),
+                              Text("${widget.order["amount"]} Rs",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
                             ],
                           ),
                         ),
-                        Icon(Icons.copy)
-                      ],
-                    )),
-                SizedBox(height: 10),
-                Text(
-                  "user data:",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(height: 5),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(widget.order["username"]),
-                          SizedBox(height: 5),
-                          // Text("jerinjacob0007@gmail.com"),
-                          Text("+91 ${widget.order["phoneNumber"]}"),
-                        ],
                       ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                      decoration:
-                          BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.white, boxShadow: [
-                        BoxShadow(color: Pallet.shadow, offset: const Offset(2, 2), blurRadius: 1, spreadRadius: 2),
-                      ]),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.call,
-                            color: Pallet.primary,
-                            size: 20,
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            "call",
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(height: 10),
-                Text(
-                  "Items:",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(height: 5),
-                for (var product in products)
-                  Container(
-                    height: 100,
-                    padding: EdgeInsets.all(8),
-                    margin: EdgeInsets.only(bottom: 5),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Pallet.inner1),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            getUrl(product["imageId"]),
-                            // "assets/oil.jpeg",
-                            width: 90,
-                            height: 90,
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Container(
+                          height: 60,
+                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Pallet.primary),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Items weight", style: TextStyle(fontSize: 12, color: Colors.white)),
+                              Expanded(child: SizedBox()),
+                              Text("${widget.order["itemWeight"]} Kg",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+                            ],
                           ),
                         ),
-                        SizedBox(width: 10),
-                        Expanded(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(product["name"]),
-                                Container(
-                                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Pallet.primary,
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "qty: ${product["qty"]}",
-                                        style: TextStyle(fontSize: 12, color: Colors.white),
-                                      ),
-                                    ))
-                              ],
-                            ),
-                            Expanded(child: SizedBox()),
-                            Container(
-                                padding: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.05), borderRadius: BorderRadius.circular(5)),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                        child: Text(
-                                      product["\$id"],
-                                      style: TextStyle(fontSize: 12),
-                                    )),
-                                    Icon(Icons.copy)
-                                  ],
-                                )),
-                          ],
-                        )),
-                      ],
-                    ),
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Container(
+                          height: 60,
+                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Pallet.primary),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Payment type", style: TextStyle(fontSize: 12, color: Colors.white)),
+                              Expanded(child: SizedBox()),
+                              Text(widget.order["paymentType"],
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                SizedBox(height: 5),
-                Text(
-                  "Details:",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-                SizedBox(height: 5),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 60,
-                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Pallet.primary),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Total Amount", style: TextStyle(fontSize: 12, color: Colors.white)),
-                            // style: TextStyle(fontSize: 12, color: Pallet.font2)),
-                            Expanded(child: SizedBox()),
-                            Text("${widget.order["amount"]} Rs",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    Expanded(
-                      child: Container(
-                        height: 60,
-                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Pallet.primary),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Items weight", style: TextStyle(fontSize: 12, color: Colors.white)),
-                            Expanded(child: SizedBox()),
-                            Text("${widget.order["itemWeight"]} Kg",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 5),
-                    Expanded(
-                      child: Container(
-                        height: 60,
-                        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Pallet.primary),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Payment type", style: TextStyle(fontSize: 12, color: Colors.white)),
-                            Expanded(child: SizedBox()),
-                            Text(widget.order["paymentType"],
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(height: 10),
-              ],
+                  SizedBox(height: 10),
+                ],
+              ),
             ),
-          ),
-          if (widget.order["orderStatus"] == "pending")
-            Button(
-                label: "Accept Delivery",
-                onPress: () async {
-                  await acceptDelivery(widget.order["\$id"]);
-                  widget.order["orderStatus"] = "picking";
-                  setState(() {});
-                }),
-          if (widget.order["orderStatus"] == "picking")
-            Row(
-              children: [
-                Button(
-                    label: "Go to Warehouse",
-                    icon: Icon(Icons.my_location, color: Colors.white, size: 18),
-                    onPress: () async {
-                      Map warehouse = await getWareHouse();
-                      bool? exist = await MapLauncher.isMapAvailable(MapType.google);
-                      if (exist == true) {
-                        await MapLauncher.showMarker(
-                          mapType: MapType.google,
-                          coords: Coords(warehouse["latitude"], warehouse["longitude"]),
-                          title: "Warehouse 1",
-                        );
-                      }
-                    }),
-                SizedBox(width: 8),
-                Expanded(
-                    child: Button(
-                        label: "Order Picked Up",
-                        icon: Icon(Icons.check_circle, color: Colors.white, size: 18),
-                        onPress: () {
-                          updateOrderStatus(widget.order["\$id"], "delivering");
-                          widget.order["orderStatus"] = "delivering";
-                          setState(() {});
-                        })),
-              ],
-            )
-          else if (widget.order["orderStatus"] == "delivering")
-            Row(
-              children: [
-                Button(
-                    label: "Go to Location",
-                    icon: Icon(Icons.my_location, color: Colors.white, size: 18),
-                    onPress: () async {}),
-                SizedBox(width: 8),
-                Expanded(
-                    child: Button(
-                        label: "Delivery Completed",
-                        icon: Icon(Icons.check_circle, color: Colors.white, size: 18),
-                        onPress: () {
-                          updateOrderStatus(widget.order["\$id"], "delivered");
-                          Navigator.pop(context);
-                        })),
-              ],
-            ),
-        ],
+            if (widget.order["orderStatus"] == "pending")
+              Button(
+                  label: "Accept Delivery",
+                  onPress: () async {
+                    await acceptDelivery(widget.order["\$id"]);
+                    widget.order["orderStatus"] = "picking";
+                    setState(() {});
+                  }),
+            if (widget.order["orderStatus"] == "picking")
+              Row(
+                children: [
+                  Button(
+                      label: "Go to Warehouse",
+                      icon: Icon(Icons.my_location, color: Colors.white, size: 18),
+                      onPress: () async {
+                        Map warehouse = await getWareHouse();
+                        bool? exist = await MapLauncher.isMapAvailable(MapType.google);
+                        if (exist == true) {
+                          await MapLauncher.showMarker(
+                            mapType: MapType.google,
+                            coords: Coords(warehouse["latitude"], warehouse["longitude"]),
+                            title: "Warehouse 1",
+                          );
+                        }
+                      }),
+                  SizedBox(width: 8),
+                  Expanded(
+                      child: Button(
+                          label: "Order Picked Up",
+                          icon: Icon(Icons.check_circle, color: Colors.white, size: 18),
+                          onPress: () {
+                            updateOrderStatus(widget.order["\$id"], "delivering");
+                            widget.order["orderStatus"] = "delivering";
+                            setState(() {});
+                          })),
+                ],
+              )
+            else if (widget.order["orderStatus"] == "delivering")
+              Row(
+                children: [
+                  Button(
+                      label: "Go to Location",
+                      icon: Icon(Icons.my_location, color: Colors.white, size: 18),
+                      onPress: () async {}),
+                  SizedBox(width: 8),
+                  Expanded(
+                      child: Button(
+                          label: "Delivery Completed",
+                          icon: Icon(Icons.check_circle, color: Colors.white, size: 18),
+                          onPress: () {
+                            updateOrderStatus(widget.order["\$id"], "delivered");
+                            Navigator.pop(context);
+                          })),
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }
