@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'screens/dashboard.dart';
 // import 'package:grokci_fe/orders.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,18 +9,22 @@ import 'screens/account.dart';
 import 'types.dart';
 import 'package:appwrite/appwrite.dart';
 import 'backend/server.dart';
+// import 'package:twilio_flutter/twilio_flutter.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   Client client = Client();
   account = Account(client);
 
   db = Databases(client);
+  storage = Storage(client);
 
   client
-          .setEndpoint(DbConfig.endpoint) // Your Appwrite Endpoint
-          .setProject(DbConfig.project) // Your project ID
+          .setEndpoint(AppConfig.endpoint) // Your Appwrite Endpoint
+          .setProject(AppConfig.project) // Your project ID
           .setSelfSigned() // Use only on dev mode with a self-signed SSL cert
       ;
 
@@ -34,10 +39,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      // theme: ThemeData(
-      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      //   useMaterial3: true,
-      // ),
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(TextTheme(
           displayLarge: TextStyle(color: Pallet.font1),
@@ -48,22 +49,32 @@ class MyApp extends StatelessWidget {
         iconTheme: IconThemeData(color: Pallet.font1),
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const Home(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class Home extends StatefulWidget {
+  const Home({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Home> createState() => _HomeState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomeState extends State<Home> {
   int navIdx = 0;
+
+  @override
+  void initState() {
+    test();
+    
+    super.initState();
+  }
+
+  test() async {
+    await local.ready;
+    local.setItem("phone", "7845039503");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +104,27 @@ class _MyHomePageState extends State<MyHomePage> {
           setState(() {});
         },
       ),
-      body: SafeArea(child: Login()),
+      body: SafeArea(
+        child: Navigator(
+          pages: [
+            if (navIdx == 0)
+              MaterialPage(
+                child: Dashboard(),
+              )
+            else if (navIdx == 1)
+              MaterialPage(
+                child: Orders(),
+              )
+            else if (navIdx == 2)
+              MaterialPage(
+                child: Profile(),
+              )
+          ],
+          onPopPage: (route, result) {
+            return true;
+          },
+        ),
+      ),
     );
   }
 }

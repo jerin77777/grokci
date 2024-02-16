@@ -192,7 +192,7 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
                   color: (widget.active)
                       ? Colors.white
                       : Colors.white.withOpacity(0.5),
-                  fontSize: 14,
+                  fontSize: 13.5,
                 ),
               ),
               SizedBox(width: 10)

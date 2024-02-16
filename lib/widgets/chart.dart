@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import '../types.dart';
 
 class LineChart2 extends StatelessWidget {
-  const LineChart2({required this.isShowingMainData});
-
-  final bool isShowingMainData;
+  const LineChart2({super.key, required this.data, required this.maxY, required this.maxX, required this.page});
+  final List data;
+  final double maxY;
+  final int page;
+  final double maxX;
 
   @override
   Widget build(BuildContext context) {
@@ -68,65 +70,47 @@ class LineChart2 extends StatelessWidget {
             isStrokeCapRound: true,
             dotData: FlDotData(show: false),
             // belowBarData: BarAreaData(show: false),
-            spots: const [
-              FlSpot(0, 1),
-              FlSpot(3, 4),
-              FlSpot(5, 1.8),
-              FlSpot(7, 5),
-              FlSpot(10, 2),
-              FlSpot(12, 2.2),
-              // FlSpot(15, 1.8),
+            spots: [
+              for (var i = 0; i < data.length; i++) FlSpot(i * 1.0, data[i]),
             ],
           )
         ],
         minX: 0,
         maxX: 12,
-        maxY: 6,
+        maxY: maxY,
         minY: 0,
       ),
     );
   }
-}
 
-Widget leftTitleWidgets(double value, TitleMeta meta) {
-  String text;
-  switch (value.toInt()) {
-    case 1:
-      text = '1k';
-      break;
-    case 2:
-      text = '2k';
-      break;
-    case 3:
-      text = '3k';
-      break;
-    case 4:
-      text = '5k';
-      break;
-    case 5:
-      text = '6k';
-      break;
-    default:
+  Widget leftTitleWidgets(double value, TitleMeta meta) {
+    String text;
+    int inc = 50;
+    text = "";
+    if (inc * 1 == value.toInt()) {
+      text = (inc * 1).toString();
+    } else if (inc * 2 == value.toInt()) {
+      text = (inc * 2).toString();
+    } else if (inc * 3 == value.toInt()) {
+      text = (inc * 3).toString();
+    } else if (inc * 4 == value.toInt()) {
+      text = (inc * 4).toString();
+    } else if (inc * 5 == value.toInt()) {
+      text = (inc * 5).toString();
+    } else {
       return Container();
+    }
+    return Text(text, textAlign: TextAlign.center);
   }
 
-  return Text(text,
-      // style: TextStyle(
-      // fontSize: 14
-      // ),
-      textAlign: TextAlign.center);
-}
-
-Widget bottomTitleWidgets(double value, TitleMeta meta) {
-  return SideTitleWidget(
-    axisSide: meta.axisSide,
-    space: 10,
-    child: Text(
-      value.toInt().toString(),
-      // style: TextStyle(
-      //   // fontWeight: FontWeight.bold,
-      //   fontSize: 16,
-      // )
-    ),
-  );
+  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+    value = (value + ((page - 1) * 12));
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 10,
+      child: Text(
+        (value > maxX) ? "" : (value).toInt().toString(),
+      ),
+    );
+  }
 }
