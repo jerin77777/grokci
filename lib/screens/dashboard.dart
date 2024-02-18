@@ -60,7 +60,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     SizedBox(width: 8),
                     Text(
-                      "Jerin George Jacob",
+                     data!["userName"],
                       style: TextStyle(fontSize: 12),
                     )
                   ],
@@ -153,7 +153,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            "100 Rs",
+                            "${data!["amount"]} Rs",
                             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),
                           ),
                         ],
@@ -191,7 +191,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            "2",
+                            "${data!["count"]}",
                             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),
                           ),
                         ],

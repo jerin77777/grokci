@@ -58,7 +58,7 @@ class _OrdersState extends State<Orders> {
                               ProfileIcon(
                                 size: 25,
                                 color: Colors.blue,
-                                name: order["username"][0],
+                                name: order["username"],
                               ),
                               SizedBox(width: 8),
                               Text(
@@ -373,7 +373,16 @@ class _OrderDetailsState extends State<OrderDetails> {
                   Button(
                       label: "Go to Location",
                       icon: Icon(Icons.my_location, color: Colors.white, size: 18),
-                      onPress: () async {}),
+                      onPress: () async {
+                         bool? exist = await MapLauncher.isMapAvailable(MapType.google);
+                        if (exist == true) {
+                          await MapLauncher.showMarker(
+                            mapType: MapType.google,
+                            coords: Coords(widget.order["latitude"], widget.order["longitude"]),
+                            title: "Delivery Location",
+                          );
+                        }
+                      }),
                   SizedBox(width: 8),
                   Expanded(
                       child: Button(

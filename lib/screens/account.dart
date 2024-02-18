@@ -93,28 +93,33 @@ class _ProfileState extends State<Profile> {
               child: Column(
                 children: [
                   SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Icon(Icons.delivery_dining, color: Pallet.primary),
-                      SizedBox(width: 10),
-                      Text("My Orders", style: TextStyle(color: Pallet.primary)),
-                      Expanded(child: SizedBox()),
-                      Icon(Icons.arrow_forward_ios, color: Pallet.primary, size: 14),
-                      SizedBox(width: 5)
-                    ],
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(mainContext).push(MaterialPageRoute(builder: (context) => MyOrders()));
+                    },
+                    child: Row(
+                      children: [
+                        Icon(Icons.delivery_dining, color: Pallet.primary),
+                        SizedBox(width: 10),
+                        Text("My Orders", style: TextStyle(color: Pallet.primary)),
+                        Expanded(child: SizedBox()),
+                        Icon(Icons.arrow_forward_ios, color: Pallet.primary, size: 14),
+                        SizedBox(width: 5)
+                      ],
+                    ),
                   ),
                   Divider(indent: 0, endIndent: 0, height: 18),
-                  Row(
-                    children: [
-                      Icon(Icons.lock_person_rounded, color: Pallet.primary),
-                      SizedBox(width: 10),
-                      Text("Login & Security", style: TextStyle(color: Pallet.primary)),
-                      Expanded(child: SizedBox()),
-                      Icon(Icons.arrow_forward_ios, color: Pallet.primary, size: 14),
-                      SizedBox(width: 5)
-                    ],
-                  ),
-                  Divider(indent: 0, endIndent: 0, height: 18),
+                  // Row(
+                  //   children: [
+                  //     Icon(Icons.lock_person_rounded, color: Pallet.primary),
+                  //     SizedBox(width: 10),
+                  //     Text("Login & Security", style: TextStyle(color: Pallet.primary)),
+                  //     Expanded(child: SizedBox()),
+                  //     Icon(Icons.arrow_forward_ios, color: Pallet.primary, size: 14),
+                  //     SizedBox(width: 5)
+                  //   ],
+                  // ),
+                  // Divider(indent: 0, endIndent: 0, height: 18),
                   Row(
                     children: [
                       Icon(Icons.language, color: Pallet.primary),
@@ -145,24 +150,118 @@ class _MyOrdersState extends State<MyOrders> {
   List<Map> orders = [];
   @override
   void initState() {
+    getData();
     // TODO: implement initState
     super.initState();
   }
 
   getData() async {
     orders = await getMyOrders();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView(
-      children: [
-        for (var order in orders)
-          Container(
-            child: Text(""),
-          )
-      ],
+        body: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: ListView(
+        children: [
+          Text(
+            "My Orders",
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
+          ),
+          SizedBox(height: 10),
+          for (var order in orders)
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              decoration: BoxDecoration(color: Pallet.inner1, borderRadius: BorderRadius.circular(10)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ProfileIcon(
+                        size: 30,
+                        color: Colors.blue,
+                        name: order["username"],
+                      ),
+                      SizedBox(width: 8),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            order["username"],
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          Text("+91 ${order["phoneNumber"]}"),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 60,
+                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Pallet.primary),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Total Amount", style: TextStyle(fontSize: 12, color: Colors.white)),
+                              // style: TextStyle(fontSize: 12, color: Pallet.font2)),
+                              Expanded(child: SizedBox()),
+                              Text("${order["amount"]} Rs",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Container(
+                          height: 60,
+                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Pallet.primary),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Items weight", style: TextStyle(fontSize: 12, color: Colors.white)),
+                              Expanded(child: SizedBox()),
+                              Text("${order["itemWeight"]} Kg",
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Container(
+                          height: 60,
+                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: Pallet.primary),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Payment type", style: TextStyle(fontSize: 12, color: Colors.white)),
+                              Expanded(child: SizedBox()),
+                              Text(order["paymentType"],
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            )
+        ],
+      ),
     ));
   }
 }

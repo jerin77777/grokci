@@ -8,6 +8,8 @@ import 'package:grokci/main.dart';
 import 'package:grokci/screens/login.dart';
 import 'package:twilio_flutter/twilio_flutter.dart';
 import 'package:localstorage/localstorage.dart';
+import 'dart:io' as fl;
+import 'package:path/path.dart';
 
 late Databases db;
 late Account account;
@@ -108,7 +110,7 @@ Future<Map> getDashboard() async {
   Document userData =
       await db.getDocument(databaseId: AppConfig.database, collectionId: AppConfig.drivers, documentId: phone);
 
-  data["pendingOrder"] = userData.data["userName"];
+  data["userName"] = userData.data["userName"];
   temp = await db.listDocuments(databaseId: AppConfig.database, collectionId: AppConfig.orders, queries: [
     Query.equal("driverId", phone),
     Query.equal("orderStatus", "delivered"),
@@ -161,7 +163,7 @@ List<Map> getResult(List<Document> documents) {
 }
 
 Future<Map> getWareHouse() async {
-  DocumentList temp = await db.listDocuments(databaseId: AppConfig.database, collectionId: AppConfig.database);
+  DocumentList temp = await db.listDocuments(databaseId: AppConfig.database, collectionId: AppConfig.warehouses);
   return temp.documents.first.data;
 }
 
@@ -213,11 +215,14 @@ acceptDelivery(String orderId) async {
 
   // if driver has no pending orders
   if (result.documents.isEmpty) {
-    Document result2 = await db.getDocument(
-        databaseId: AppConfig.database, collectionId: AppConfig.orders, documentId: AppConfig.orders);
+    Document? result2;
+    try {
+      result2 = await db.getDocument(
+          databaseId: AppConfig.database, collectionId: AppConfig.orders, documentId: AppConfig.orders);
+    } catch (e) {}
 
     // if no other drivers has taken order
-    if (result2.data["driverId"] == null) {
+    if (result2?.data["driverId"] == null) {
       updateOrderStatus(orderId, "picking");
       print("can pick up");
     }
@@ -227,6 +232,7 @@ acceptDelivery(String orderId) async {
 }
 
 updateOrderStatus(String orderId, String status) async {
+  // print(orderId);
   await local.ready;
   String phone = local.getItem("phone");
   Map data = {};
@@ -245,15 +251,15 @@ createAccount(
   String phoneNumber,
   String userName,
   String age,
-  FilePickerResult fileFront,
-  FilePickerResult? fileBack,
+  fl.File fileFront,
+  fl.File? fileBack,
 ) async {
   String? _fileBack;
   File front = await storage.createFile(
       bucketId: "65cdfdc7bba4531e45ad",
       fileId: ID.unique(),
       file: InputFile.fromBytes(
-          bytes: List<int>.from(fileFront.files.first.bytes!), filename: fileFront.files.first.name));
+          bytes: List<int>.from(fileFront.readAsBytesSync()), filename: basename(fileFront.path)));
   String _fileFront = front.$id;
 // https://cloud.appwrite.io/v1/storage/buckets/65cdfdc7bba4531e45ad/files/65ce10b30237d3fb3a63/view?project=grokci&mode=admin
 
@@ -262,7 +268,7 @@ createAccount(
         bucketId: "65cdfdc7bba4531e45ad",
         fileId: ID.unique(),
         file: InputFile.fromBytes(
-            bytes: List<int>.from(fileFront.files.first.bytes!), filename: fileFront.files.first.name));
+            bytes: List<int>.from(fileFront.readAsBytesSync()), filename: basename(fileFront.path)));
     _fileBack = back.$id;
   }
 
