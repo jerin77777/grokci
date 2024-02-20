@@ -1,5 +1,7 @@
 // import 'dart:js_interop';
 
+import 'dart:math';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:file_picker/file_picker.dart';
@@ -32,9 +34,9 @@ class AppConfig {
   static String orderProductMap = "65cf257b2dfaa673e1ad";
   static String drivers = "65ccc7954c7d0de38f77";
   static String warehouses = "65cf4c83826d08f5f8f0";
-  static String twilloSid = "ACf1fdca2a33fc51fb0c4534e6ff1af358";
-  static String twilloToken = "f96446db67211b40b1e766951bf6f65b";
-  static String twilloNumber = "+12134933188";
+  static String twilloSid = "AC33a068cac24d00e8ec4705fc06b7ba44";
+  static String twilloToken = "6a004b7045820804209ccef7e4d1e8e5";
+  static String twilloNumber = "+12562721990";
 }
 
 getOrders() async {
@@ -182,20 +184,20 @@ login(context, phoneNumber) async {
         builder: (context) => SignUp(
               phoneNumber: phoneNumber,
             )));
-
-    // Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
   }
-  // TwilioFlutter twilioFlutter = TwilioFlutter(
-  //     accountSid: AppConfig.twilloSid, // replace *** with Account SID
-  //     authToken: AppConfig.twilloToken, // replace xxx with Auth Token
-  //     twilioNumber: AppConfig.twilloNumber // replace .... with Twilio Number
-  //     );
+}
 
-  // twilioFlutter.sendSMS(toNumber: "+91 7845039503", messageBody: "120");
-  // account.createPhoneSession(userId: "userId", phone: phone)
-  // await account.createEmailSession(email: "jerinjacob0007@gmail.com", password: "0007!asd");
-  // account.get();
-  // account.createPhoneVerification()
+Future<int> sendOtp(phoneNumber) async {
+  TwilioFlutter twilioFlutter = TwilioFlutter(
+      accountSid: AppConfig.twilloSid, // replace *** with Account SID
+      authToken: AppConfig.twilloToken, // replace xxx with Auth Token
+      twilioNumber: AppConfig.twilloNumber // replace .... with Twilio Number
+      );
+
+  final Random _random = Random();
+  int _otp = 1000 + _random.nextInt(9000);
+  await twilioFlutter.sendSMS(toNumber: "+91 ${phoneNumber}", messageBody: " your one time otp is: ${_otp}");
+  return _otp;
 }
 
 getUrl(String imageId) {
@@ -258,8 +260,8 @@ createAccount(
   File front = await storage.createFile(
       bucketId: "65cdfdc7bba4531e45ad",
       fileId: ID.unique(),
-      file: InputFile.fromBytes(
-          bytes: List<int>.from(fileFront.readAsBytesSync()), filename: basename(fileFront.path)));
+      file:
+          InputFile.fromBytes(bytes: List<int>.from(fileFront.readAsBytesSync()), filename: basename(fileFront.path)));
   String _fileFront = front.$id;
 // https://cloud.appwrite.io/v1/storage/buckets/65cdfdc7bba4531e45ad/files/65ce10b30237d3fb3a63/view?project=grokci&mode=admin
 

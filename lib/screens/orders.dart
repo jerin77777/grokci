@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:grokci/backend/server.dart';
+import 'package:telephony/telephony.dart';
+import '../main.dart';
 import '../types.dart';
 import '../widgets/widgets.dart';
 import 'package:map_launcher/map_launcher.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+
+backgrounMessageHandler(SmsMessage message) async {
+  //Handle background message
+}
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
@@ -374,7 +382,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       label: "Go to Location",
                       icon: Icon(Icons.my_location, color: Colors.white, size: 18),
                       onPress: () async {
-                         bool? exist = await MapLauncher.isMapAvailable(MapType.google);
+                        bool? exist = await MapLauncher.isMapAvailable(MapType.google);
                         if (exist == true) {
                           await MapLauncher.showMarker(
                             mapType: MapType.google,
@@ -388,13 +396,91 @@ class _OrderDetailsState extends State<OrderDetails> {
                       child: Button(
                           label: "Delivery Completed",
                           icon: Icon(Icons.check_circle, color: Colors.white, size: 18),
-                          onPress: () {
-                            updateOrderStatus(widget.order["\$id"], "delivered");
-                            Navigator.pop(context);
+                          onPress: () async {
+                            await local.ready;
+                            String phone = local.getItem("phone");
+                            int _otp = await sendOtp(phone);
+                            Navigator.of(mainContext).push(MaterialPageRoute(
+                                builder: (context) => ConfirmDelivery(
+                                      orderId: widget.order["\$id"],
+                                      checkOtp: _otp,
+                                    )));
+
+                            // updateOrderStatus(widget.order["\$id"], "delivered");
+                            // Navigator.pop(context);
                           })),
                 ],
               ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ConfirmDelivery extends StatefulWidget {
+  const ConfirmDelivery({super.key, required this.checkOtp, required this.orderId});
+  final int checkOtp;
+  final String orderId;
+  @override
+  State<ConfirmDelivery> createState() => _ConfirmDeliveryState();
+}
+
+class _ConfirmDeliveryState extends State<ConfirmDelivery> {
+  final Telephony telephony = Telephony.instance;
+
+  @override
+  void initState() {
+    telephony.listenIncomingSms(
+        onNewMessage: (SmsMessage message) {
+          if (int.parse(message.body!.split(":")[1].trim()) == widget.checkOtp) {
+            updateOrderStatus(widget.orderId, "delivered");
+            Navigator.of(mainContext).push(MaterialPageRoute(
+                builder: (context) => Home(
+                      adminApproved: true,
+                    )));
+          }
+        },
+        onBackgroundMessage: backgrounMessageHandler);
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 40),
+              Text(
+                "Confirm Delivery",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+              ),
+              SizedBox(height: 40),
+              Text(
+                "Enter otp:",
+              ),
+              SizedBox(height: 15),
+              OtpTextField(
+                numberOfFields: 4,
+                borderColor: Color(0xFF512DA8),
+                showFieldAsBox: true,
+                onSubmit: (String verificationCode) {
+                  if (int.parse(verificationCode) == widget.checkOtp) {
+                    updateOrderStatus(widget.orderId, "delivered");
+                    Navigator.of(mainContext).push(MaterialPageRoute(
+                        builder: (context) => Home(
+                              adminApproved: true,
+                            )));
+                  }
+                }, // end onSubmit
+              ),
+            ],
+          ),
         ),
       ),
     );

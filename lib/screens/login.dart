@@ -12,6 +12,7 @@ import 'package:telephony/telephony.dart';
 // import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 backgrounMessageHandler(SmsMessage message) async {
   //Handle background message
@@ -28,13 +29,15 @@ class _LoginState extends State<Login> {
   final Telephony telephony = Telephony.instance;
   TextEditingController phoneNumber = TextEditingController();
   String phoneError = "";
-
+  int? checkOtp;
+  bool otpVerified = false;
   @override
   void initState() {
-    // test();
     telephony.listenIncomingSms(
         onNewMessage: (SmsMessage message) {
-          print(message.body);
+          if (int.parse(message.body!.split(":")[1].trim()) == checkOtp!) {
+            login(mainContext, phoneNumber.text);
+          }
         },
         onBackgroundMessage: backgrounMessageHandler);
     // TODO: implement initState
@@ -56,66 +59,80 @@ class _LoginState extends State<Login> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 60),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Expanded(
+                  child: ListView(
                 children: [
-                  SvgPicture.asset(
-                    width: 150,
-                    "assets/logo.svg",
+                  SizedBox(height: 60),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        width: 150,
+                        "assets/logo.svg",
+                      ),
+                    ],
                   ),
+                  SizedBox(height: 50),
+                  Text(
+                    "To get the best of us, please Log in",
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    "Enter your phone number to continue",
+                    // style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 10),
+                  if (phoneError.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Text(phoneError, style: TextStyle(color: Colors.red, fontSize: 12)),
+                    ),
+                  Container(
+                    height: 50,
+                    // padding: EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(width: 0.5)),
+                    child: Row(
+                      children: [
+                        SizedBox(width: 10),
+                        Text("+91"),
+                        Icon(Icons.arrow_drop_down_rounded),
+                        Expanded(
+                            child: TextField(
+                          controller: phoneNumber,
+                          keyboardType: TextInputType.phone,
+                          onChanged: (_) {
+                            if (phoneError.isNotEmpty) {
+                              phoneError = "";
+                              setState(() {});
+                            }
+                          },
+                          decoration: InputDecoration(border: InputBorder.none),
+                        ))
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  if (checkOtp != null)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Enter otp:"),
+                        SizedBox(height: 20),
+                        OtpTextField(
+                          numberOfFields: 4,
+                          borderColor: Color(0xFF512DA8),
+                          showFieldAsBox: true,
+                          onSubmit: (String verificationCode) {
+                            if (int.parse(verificationCode) == checkOtp!) {
+                              login(context, phoneNumber.text);
+                            }
+                          }, // end onSubmit
+                        ),
+                        SizedBox(height: 20)
+                      ],
+                    )
                 ],
-              ),
-              SizedBox(height: 50),
-              Text(
-                "To get the best of us, please Log in",
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              Text(
-                "Enter your phone number to continue",
-                // style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: 10),
-              if (phoneError.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: Text(phoneError, style: TextStyle(color: Colors.red, fontSize: 12)),
-                ),
-              Container(
-                height: 50,
-                // padding: EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Border.all(width: 0.5)),
-                child: Row(
-                  children: [
-                    SizedBox(width: 10),
-                    Text("+91"),
-                    Icon(Icons.arrow_drop_down_rounded),
-                    Expanded(
-                        child: TextField(
-                      controller: phoneNumber,
-                      keyboardType: TextInputType.phone,
-                      onChanged: (_) {
-                        if (phoneError.isNotEmpty) {
-                          phoneError = "";
-                          setState(() {});
-                        }
-                      },
-                      decoration: InputDecoration(border: InputBorder.none),
-                    ))
-                  ],
-                ),
-              ),
-              SizedBox(height: 10),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: [
-              //     Text(
-              //       "Use Email instead",
-              //       style: TextStyle(color: Pallet.primary2),
-              //     )
-              //   ],
-              // ),
-              Expanded(child: SizedBox()),
+              )),
               RichText(
                 text: TextSpan(
                   text: "By continuing, you agree to Grocki's ",
@@ -129,8 +146,8 @@ class _LoginState extends State<Login> {
               ),
               SizedBox(height: 20),
               Button(
-                  label: "Log in",
-                  onPress: () {
+                  label: "Send otp",
+                  onPress: () async {
                     bool error = false;
                     RegExp numReg = RegExp(r'^-?[0-9]+$');
                     if (phoneNumber.text.length != 10 || !numReg.hasMatch(phoneNumber.text)) {
@@ -139,7 +156,8 @@ class _LoginState extends State<Login> {
                     }
                     setState(() {});
                     if (!error) {
-                      login(context, phoneNumber.text);
+                      checkOtp = await sendOtp(phoneNumber.text);
+                      setState(() {});
                     }
                   }),
               SizedBox(height: 10),
