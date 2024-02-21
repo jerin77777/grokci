@@ -397,17 +397,12 @@ class _OrderDetailsState extends State<OrderDetails> {
                           label: "Delivery Completed",
                           icon: Icon(Icons.check_circle, color: Colors.white, size: 18),
                           onPress: () async {
-                            await local.ready;
-                            String phone = local.getItem("phone");
-                            int _otp = await sendOtp(phone);
+                            int _otp = await sendOtp(widget.order["phoneNumber"]);
                             Navigator.of(mainContext).push(MaterialPageRoute(
                                 builder: (context) => ConfirmDelivery(
                                       orderId: widget.order["\$id"],
                                       checkOtp: _otp,
                                     )));
-
-                            // updateOrderStatus(widget.order["\$id"], "delivered");
-                            // Navigator.pop(context);
                           })),
                 ],
               ),

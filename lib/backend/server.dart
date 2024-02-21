@@ -34,9 +34,9 @@ class AppConfig {
   static String orderProductMap = "65cf257b2dfaa673e1ad";
   static String drivers = "65ccc7954c7d0de38f77";
   static String warehouses = "65cf4c83826d08f5f8f0";
-  static String twilloSid = "AC33a068cac24d00e8ec4705fc06b7ba44";
-  static String twilloToken = "6a004b7045820804209ccef7e4d1e8e5";
-  static String twilloNumber = "+12562721990";
+  static String twilloSid = "***";
+  static String twilloToken = "***";
+  static String twilloNumber = "***";
 }
 
 getOrders() async {
