@@ -8,6 +8,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:grokci/main.dart';
 import 'package:grokci/screens/login.dart';
+import 'package:simplytranslate/simplytranslate.dart';
 import 'package:twilio_flutter/twilio_flutter.dart';
 import 'package:localstorage/localstorage.dart';
 import 'dart:io' as fl;
@@ -17,7 +18,9 @@ late Databases db;
 late Account account;
 late Storage storage;
 late BuildContext mainContext;
+late SimplyTranslator gt;
 
+bool english = true;
 final LocalStorage local = LocalStorage('grokci');
 
 // late TwilioFlutter twilioFlutter;
@@ -171,13 +174,15 @@ Future<Map> getWareHouse() async {
 
 login(context, phoneNumber) async {
   try {
-    Document temp =
-        await db.getDocument(databaseId: AppConfig.database, collectionId: AppConfig.drivers, documentId: phoneNumber);
+    bool adminApproved = await getAdminApproved(phoneNumber);
+    // Document temp =
+    // await db.getDocument(databaseId: AppConfig.database, collectionId: AppConfig.drivers, documentId: phoneNumber);
     await local.ready;
     local.setItem("phone", phoneNumber);
+    local.setItem("adminApproved", adminApproved);
     Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (context) => Home(
-              adminApproved: temp.data["adminApproved"],
+              adminApproved: adminApproved,
             )));
   } catch (e) {
     Navigator.of(context).push(MaterialPageRoute(
@@ -248,6 +253,12 @@ updateOrderStatus(String orderId, String status) async {
       databaseId: AppConfig.database, collectionId: AppConfig.orders, documentId: orderId, data: data);
 }
 
+Future<bool> getAdminApproved(String phoneNumber) async {
+  Document temp =
+      await db.getDocument(databaseId: AppConfig.database, collectionId: AppConfig.drivers, documentId: phoneNumber);
+  return temp.data["adminApproved"];
+}
+
 createAccount(
   context,
   String phoneNumber,
@@ -283,5 +294,6 @@ createAccount(
   });
 
   local.setItem("phone", phoneNumber);
+  local.setItem("adminApproved", false);
   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home(adminApproved: false)));
 }

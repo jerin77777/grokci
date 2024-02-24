@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:simplytranslate/simplytranslate.dart';
 import 'screens/dashboard.dart';
 // import 'package:grokci_fe/orders.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,6 +23,8 @@ void main() {
 
   db = Databases(client);
   storage = Storage(client);
+
+  gt = SimplyTranslator(EngineType.google);
 
   client
           .setEndpoint(AppConfig.endpoint) // Your Appwrite Endpoint
@@ -50,7 +54,54 @@ class MyApp extends StatelessWidget {
         iconTheme: IconThemeData(color: Pallet.font1),
         primarySwatch: Colors.blue,
       ),
-      home: Login(),
+      home: Loader(),
+    );
+  }
+}
+
+class Loader extends StatefulWidget {
+  const Loader({super.key});
+
+  @override
+  State<Loader> createState() => _LoaderState();
+}
+
+class _LoaderState extends State<Loader> {
+  bool? loggedIn;
+  bool adminApproved = false;
+  @override
+  void initState() {
+    getData();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  getData() async {
+    await local.ready;
+    String? _phone = local.getItem("phone");
+    bool? _adminApproved = local.getItem("adminApproved");
+    english = local.getItem("english") ?? true;
+
+    loggedIn = (_phone != null);
+
+    if (_adminApproved == false) {
+      adminApproved = await getAdminApproved(_phone!);
+    } else {
+      adminApproved = true;
+    }
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (loggedIn == true) {
+      return Home(adminApproved: adminApproved);
+    } else if (loggedIn == false) {
+      return Login();
+    }
+
+    return const Center(
+      child: CircularProgressIndicator(),
     );
   }
 }
@@ -73,7 +124,7 @@ class _HomeState extends State<Home> {
 
   test() async {
     await local.ready;
-    local.setItem("phone", "7845039503");
+    local.setItem("admin", "7845039503");
   }
 
   @override

@@ -39,7 +39,7 @@ class _OrdersState extends State<Orders> {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: ListView(
         children: [
-          Text(
+          TextTra(
             "Orders",
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
           ),
@@ -69,15 +69,15 @@ class _OrdersState extends State<Orders> {
                                 name: order["username"],
                               ),
                               SizedBox(width: 8),
-                              Text(
+                              TextTra(
                                 order["username"],
                                 style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ],
                           ),
                           Expanded(child: SizedBox(height: 20)),
-                          Text(order["deliveryAddress"].toString().trim()),
-                          Text(
+                          TextTra(order["deliveryAddress"].toString().trim()),
+                          TextTra(
                             "${order["distance"]} km away",
                             style: TextStyle(fontSize: 13, color: Pallet.font3),
                           )
@@ -88,12 +88,12 @@ class _OrdersState extends State<Orders> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        // Text("Distance"),
-                        // Text("500 m"),
+                        // TextTra("Distance"),
+                        // TextTra("500 m"),
                         // SizedBox(height: 20),
                         // Expanded(child: SizedBox()),
-                        Text("Amount"),
-                        Text(
+                        TextTra("Amount"),
+                        TextTra(
                           "${order["amount"]} Rs",
                           style: TextStyle(color: Pallet.primary, fontSize: 18, fontWeight: FontWeight.w600),
                         )
@@ -141,7 +141,7 @@ class _OrderDetailsState extends State<OrderDetails> {
             Expanded(
               child: ListView(
                 children: [
-                  Text(
+                  TextTra(
                     "Order Details",
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
                   ),
@@ -155,8 +155,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Order Id"),
-                                Text(widget.order["\$id"]),
+                                TextTra("Order Id"),
+                                TextTra(widget.order["\$id"]),
                               ],
                             ),
                           ),
@@ -164,7 +164,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                         ],
                       )),
                   SizedBox(height: 10),
-                  Text(
+                  TextTra(
                     "user data:",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
@@ -176,10 +176,10 @@ class _OrderDetailsState extends State<OrderDetails> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(widget.order["username"]),
+                            TextTra(widget.order["username"]),
                             SizedBox(height: 5),
-                            // Text("jerinjacob0007@gmail.com"),
-                            Text("+91 ${widget.order["phoneNumber"]}"),
+                            // TextTra("jerinjacob0007@gmail.com"),
+                            TextTra("+91 ${widget.order["phoneNumber"]}"),
                           ],
                         ),
                       ),
@@ -197,7 +197,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                               size: 20,
                             ),
                             SizedBox(width: 5),
-                            Text(
+                            TextTra(
                               "call",
                               style: TextStyle(fontWeight: FontWeight.w500),
                             ),
@@ -207,7 +207,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  Text(
+                  TextTra(
                     "Items:",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
@@ -238,7 +238,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(product["name"]),
+                                  TextTra(product["name"]),
                                   Container(
                                       padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                                       decoration: BoxDecoration(
@@ -246,7 +246,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                         color: Pallet.primary,
                                       ),
                                       child: Center(
-                                        child: Text(
+                                        child: TextTra(
                                           "qty: ${product["qty"]}",
                                           style: TextStyle(fontSize: 12, color: Colors.white),
                                         ),
@@ -261,7 +261,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   child: Row(
                                     children: [
                                       Expanded(
-                                          child: Text(
+                                          child: TextTra(
                                         product["\$id"],
                                         style: TextStyle(fontSize: 12),
                                       )),
@@ -274,7 +274,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       ),
                     ),
                   SizedBox(height: 5),
-                  Text(
+                  TextTra(
                     "Details:",
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
@@ -289,10 +289,10 @@ class _OrderDetailsState extends State<OrderDetails> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Total Amount", style: TextStyle(fontSize: 12, color: Colors.white)),
+                              TextTra("Total Amount", style: TextStyle(fontSize: 12, color: Colors.white)),
                               // style: TextStyle(fontSize: 12, color: Pallet.font2)),
                               Expanded(child: SizedBox()),
-                              Text("${widget.order["amount"]} Rs",
+                              TextTra("${widget.order["amount"]} Rs",
                                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
                             ],
                           ),
@@ -307,9 +307,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Items weight", style: TextStyle(fontSize: 12, color: Colors.white)),
+                              TextTra("Items weight", style: TextStyle(fontSize: 12, color: Colors.white)),
                               Expanded(child: SizedBox()),
-                              Text("${widget.order["itemWeight"]} Kg",
+                              TextTra("${widget.order["itemWeight"]} Kg",
                                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
                             ],
                           ),
@@ -324,9 +324,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Payment type", style: TextStyle(fontSize: 12, color: Colors.white)),
+                              TextTra("Payment type", style: TextStyle(fontSize: 12, color: Colors.white)),
                               Expanded(child: SizedBox()),
-                              Text(widget.order["paymentType"],
+                              TextTra(widget.order["paymentType"],
                                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
                             ],
                           ),
@@ -391,7 +391,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                           );
                         }
                       }),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Expanded(
                       child: Button(
                           label: "Delivery Completed",
@@ -451,12 +451,12 @@ class _ConfirmDeliveryState extends State<ConfirmDelivery> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 40),
-              Text(
+              TextTra(
                 "Confirm Delivery",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
               ),
               SizedBox(height: 40),
-              Text(
+              TextTra(
                 "Enter otp:",
               ),
               SizedBox(height: 15),

@@ -1,16 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../backend/server.dart';
 import '../types.dart';
+import 'package:simplytranslate/simplytranslate.dart';
+
+class TextTra extends StatefulWidget {
+  String text;
+  TextStyle? style;
+  TextAlign? textAlign;
+  TextTra(this.text, {this.style, this.textAlign});
+
+  @override
+  State<TextTra> createState() => _TextTraState();
+}
+
+class _TextTraState extends State<TextTra> {
+  Translation? textTra;
+  void textTras() async {
+    textTra = await gt.translateSimply(widget.text, from: "en", to: "hi");
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    if (!english) {
+      textTras();
+    }
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return english
+        ? Text(
+            widget.text,
+            style: widget.style,
+            textAlign: widget.textAlign,
+          )
+        : textTra == null
+            ? Text(
+                "loading",
+                style: widget.style,
+                textAlign: widget.textAlign,
+              )
+            : Text(
+                textTra!.translations.text,
+                style: widget.style,
+                textAlign: widget.textAlign,
+              );
+  }
+}
 
 class ProfileIcon extends StatelessWidget {
-  const ProfileIcon(
-      {super.key,
-      this.image,
-      this.name,
-      this.color,
-      required this.size,
-      this.fontSize});
+  const ProfileIcon({super.key, this.image, this.name, this.color, required this.size, this.fontSize});
   final String? image;
   final String? name;
   final Color? color;
@@ -22,15 +66,11 @@ class ProfileIcon extends StatelessWidget {
       return Container(
         width: size,
         height: size,
-        decoration: BoxDecoration(
-            color: color, borderRadius: BorderRadius.circular(size)),
+        decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(size)),
         child: Center(
           child: Text(name![0].toString().toUpperCase(),
               style: GoogleFonts.poppins(
-                  textStyle: TextStyle(
-                      fontSize: fontSize,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500))),
+                  textStyle: TextStyle(fontSize: fontSize, color: Colors.white, fontWeight: FontWeight.w500))),
         ),
       );
     } else {
@@ -53,12 +93,7 @@ class ProfileIcon extends StatelessWidget {
 }
 
 class Button extends StatefulWidget {
-  const Button(
-      {super.key,
-      required this.label,
-      this.icon,
-      required this.onPress,
-      this.active = true});
+  const Button({super.key, required this.label, this.icon, required this.onPress, this.active = true});
   final Icon? icon;
   final String label;
   final bool active;
@@ -178,20 +213,16 @@ class _ButtonState extends State<Button> with TickerProviderStateMixin {
       child: DecoratedBoxTransition(
         decoration: decorationTween.animate(_controller),
         child: Container(
-          padding:  EdgeInsets.symmetric(vertical: (widget.icon == null)? 15: 10, horizontal: 10),
+          padding: EdgeInsets.symmetric(vertical: (widget.icon == null) ? 15 : 10, horizontal: 10),
           child: Row(
-            mainAxisAlignment: (widget.icon == null)
-                ? MainAxisAlignment.center
-                : MainAxisAlignment.start,
+            mainAxisAlignment: (widget.icon == null) ? MainAxisAlignment.center : MainAxisAlignment.start,
             children: [
               if (widget.icon != null) widget.icon!,
               SizedBox(width: 10),
-              Text(
+              TextTra(
                 widget.label,
                 style: TextStyle(
-                  color: (widget.active)
-                      ? Colors.white
-                      : Colors.white.withOpacity(0.5),
+                  color: (widget.active) ? Colors.white : Colors.white.withOpacity(0.5),
                   fontSize: 13.5,
                 ),
               ),

@@ -34,7 +34,7 @@ class _ProfileState extends State<Profile> {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: ListView(
         children: [
-          Text(
+          TextTra(
             "Account",
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
           ),
@@ -65,24 +65,24 @@ class _ProfileState extends State<Profile> {
                       Text("Hi, ${data!["userName"]}",
                           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18, overflow: TextOverflow.clip)),
                       SizedBox(height: 8),
-                      Text(
+                      TextTra(
                         "hey how are u doing?",
                         style: TextStyle(fontSize: 14, color: Pallet.font3),
                       )
                     ],
                   ),
                 ),
-                Container(
-                  child: Icon(
-                    Icons.edit,
-                    size: 20,
-                  ),
-                )
+                // Container(
+                //   child: Icon(
+                //     Icons.edit,
+                //     size: 20,
+                //   ),
+                // )
               ],
             ),
           ),
           SizedBox(height: 10),
-          Text(
+          TextTra(
             "Account settings",
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
@@ -92,50 +92,155 @@ class _ProfileState extends State<Profile> {
               decoration: BoxDecoration(color: Pallet.inner1),
               child: Column(
                 children: [
-                  SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(mainContext).push(MaterialPageRoute(builder: (context) => MyOrders()));
                     },
-                    child: Row(
+                    behavior: HitTestBehavior.opaque,
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.delivery_dining, color: Pallet.primary),
-                        SizedBox(width: 10),
-                        Text("My Orders", style: TextStyle(color: Pallet.primary)),
-                        Expanded(child: SizedBox()),
-                        Icon(Icons.arrow_forward_ios, color: Pallet.primary, size: 14),
-                        SizedBox(width: 5)
+                        SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Icon(Icons.delivery_dining, color: Pallet.primary),
+                            SizedBox(width: 10),
+                            TextTra("My Orders", style: TextStyle(color: Pallet.primary)),
+                            const Expanded(child: SizedBox()),
+                            Icon(Icons.arrow_forward_ios, color: Pallet.primary, size: 14),
+                            SizedBox(width: 5)
+                          ],
+                        ),
+                        Divider(indent: 0, endIndent: 0, height: 18),
                       ],
                     ),
                   ),
-                  Divider(indent: 0, endIndent: 0, height: 18),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(mainContext).push(MaterialPageRoute(builder: (context) => ChangeLanguage()));
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 2),
+                        Row(
+                          children: [
+                            Icon(Icons.language, color: Pallet.primary),
+                            SizedBox(width: 10),
+                            TextTra("Choose language", style: TextStyle(color: Pallet.primary)),
+                            const Expanded(child: SizedBox()),
+                            Icon(Icons.arrow_forward_ios, color: Pallet.primary, size: 14),
+                            SizedBox(width: 5)
+                          ],
+                        ),
+                        SizedBox(height: 12),
+                      ],
+                    ),
+                  ),
                   // Row(
                   //   children: [
                   //     Icon(Icons.lock_person_rounded, color: Pallet.primary),
                   //     SizedBox(width: 10),
-                  //     Text("Login & Security", style: TextStyle(color: Pallet.primary)),
+                  //     TextTra("Login & Security", style: TextStyle(color: Pallet.primary)),
                   //     Expanded(child: SizedBox()),
                   //     Icon(Icons.arrow_forward_ios, color: Pallet.primary, size: 14),
                   //     SizedBox(width: 5)
                   //   ],
                   // ),
                   // Divider(indent: 0, endIndent: 0, height: 18),
-                  Row(
-                    children: [
-                      Icon(Icons.language, color: Pallet.primary),
-                      SizedBox(width: 10),
-                      Text("Choose language", style: TextStyle(color: Pallet.primary)),
-                      Expanded(child: SizedBox()),
-                      Icon(Icons.arrow_forward_ios, color: Pallet.primary, size: 14),
-                      SizedBox(width: 5)
-                    ],
-                  ),
-                  SizedBox(height: 12),
+                  // Row(
+                  //   children: [
+                  //     Icon(Icons.language, color: Pallet.primary),
+                  //     SizedBox(width: 10),
+                  //     TextTra("Choose language", style: TextStyle(color: Pallet.primary)),
+                  //     Expanded(child: SizedBox()),
+                  //     Icon(Icons.arrow_forward_ios, color: Pallet.primary, size: 14),
+                  //     SizedBox(width: 5)
+                  //   ],
+                  // ),
                 ],
               )),
         ],
       ),
     );
+  }
+}
+
+class ChangeLanguage extends StatefulWidget {
+  const ChangeLanguage({super.key});
+
+  @override
+  State<ChangeLanguage> createState() => _ChangeLanguageState();
+}
+
+class _ChangeLanguageState extends State<ChangeLanguage> {
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    return Scaffold(
+        body: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            child: ListView(children: [
+              TextTra(
+                "Choose Language",
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
+              ),
+              SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        await local.ready;
+                        local.setItem("english", true);
+                        english = true;
+                        setState(() {});
+                      },
+                      child: Container(
+                        width: (width / 2) - 25,
+                        height: (width / 2) - 25,
+                        decoration: BoxDecoration(
+                            color: Pallet.primary.withOpacity(english ? 0.5 : 0.2),
+                            border: Border.all(color: english ? Pallet.primary : Colors.transparent, width: 2),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Center(
+                          child: Text(
+                            "English",
+                            style: TextStyle(color: Pallet.primary2, fontSize: 25),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () async {
+                        await local.ready;
+                        local.setItem("english", false);
+                        english = false;
+                        setState(() {});
+                      },
+                      child: Container(
+                        width: (width / 2) - 25,
+                        height: (width / 2) - 25,
+                        decoration: BoxDecoration(
+                          color: Pallet.primary.withOpacity(english ? 0.2 : 0.5),
+                          border: Border.all(color: english ? Colors.transparent : Pallet.primary),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "हिन्दी",
+                            style: TextStyle(color: Pallet.primary2, fontSize: 25),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ])));
   }
 }
 
@@ -167,7 +272,7 @@ class _MyOrdersState extends State<MyOrders> {
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: ListView(
         children: [
-          Text(
+          TextTra(
             "My Orders",
             style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
           ),
@@ -196,7 +301,7 @@ class _MyOrdersState extends State<MyOrders> {
                             order["username"],
                             style: TextStyle(fontWeight: FontWeight.w600),
                           ),
-                          Text("+91 ${order["phoneNumber"]}"),
+                          TextTra("+91 ${order["phoneNumber"]}"),
                         ],
                       ),
                     ],
@@ -212,10 +317,10 @@ class _MyOrdersState extends State<MyOrders> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Total Amount", style: TextStyle(fontSize: 12, color: Colors.white)),
+                              TextTra("Total Amount", style: TextStyle(fontSize: 12, color: Colors.white)),
                               // style: TextStyle(fontSize: 12, color: Pallet.font2)),
                               Expanded(child: SizedBox()),
-                              Text("${order["amount"]} Rs",
+                              TextTra("${order["amount"]} Rs",
                                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
                             ],
                           ),
@@ -230,9 +335,9 @@ class _MyOrdersState extends State<MyOrders> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Items weight", style: TextStyle(fontSize: 12, color: Colors.white)),
+                              TextTra("Items weight", style: TextStyle(fontSize: 12, color: Colors.white)),
                               Expanded(child: SizedBox()),
-                              Text("${order["itemWeight"]} Kg",
+                              TextTra("${order["itemWeight"]} Kg",
                                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
                             ],
                           ),
@@ -247,9 +352,9 @@ class _MyOrdersState extends State<MyOrders> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Payment type", style: TextStyle(fontSize: 12, color: Colors.white)),
+                              TextTra("Payment type", style: TextStyle(fontSize: 12, color: Colors.white)),
                               Expanded(child: SizedBox()),
-                              Text(order["paymentType"],
+                              TextTra(order["paymentType"],
                                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white)),
                             ],
                           ),

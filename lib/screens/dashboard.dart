@@ -90,12 +90,12 @@ class _DashboardState extends State<Dashboard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          TextTra(
                             "pending order",
                             style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                           SizedBox(height: 5),
-                          Text(
+                          TextTra(
                             "51 Sri Sakthi Gardens, Sarvanampatti, Coimbatore",
                             style: TextStyle(fontSize: 13),
                           ),
@@ -111,7 +111,7 @@ class _DashboardState extends State<Dashboard> {
                           borderRadius: BorderRadius.circular(25),
                           border: Border.all(color: Colors.red)),
                       child: Center(
-                        child: Text(
+                        child: TextTra(
                           "!",
                           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.red),
                         ),
@@ -147,12 +147,12 @@ class _DashboardState extends State<Dashboard> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          TextTra(
                             "todays earning",
                             style: TextStyle(color: Colors.white),
                           ),
                           SizedBox(height: 5),
-                          Text(
+                          TextTra(
                             "${data!["amount"]} Rs",
                             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),
                           ),
@@ -185,12 +185,12 @@ class _DashboardState extends State<Dashboard> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          TextTra(
                             "orders delivered",
                             style: TextStyle(color: Colors.white),
                           ),
                           SizedBox(height: 5),
-                          Text(
+                          TextTra(
                             "${data!["count"]}",
                             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),
                           ),
@@ -215,7 +215,7 @@ class _DashboardState extends State<Dashboard> {
               children: [
                 Row(
                   children: [
-                    Text("monthly sales"),
+                    TextTra("monthly sales"),
                     Expanded(child: SizedBox()),
                     if (graphPage > 1)
                     GestureDetector(
