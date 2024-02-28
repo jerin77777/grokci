@@ -175,8 +175,6 @@ Future<Map> getWareHouse() async {
 login(context, phoneNumber) async {
   try {
     bool adminApproved = await getAdminApproved(phoneNumber);
-    // Document temp =
-    // await db.getDocument(databaseId: AppConfig.database, collectionId: AppConfig.drivers, documentId: phoneNumber);
     await local.ready;
     local.setItem("phone", phoneNumber);
     local.setItem("adminApproved", adminApproved);
